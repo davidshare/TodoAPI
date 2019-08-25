@@ -1,6 +1,14 @@
-import connection from '../helpers/db_conn';
-
-const pool = connection();
+import TodoService from '../services/TodoService';
+import sendResponse from '../helpers/responseHelpers';
+import {
+  ADD_TODO_SUCCESS,
+  DELETE_TODO_SUCCESS,
+  GET_TODO_SUCCESS,
+  UPDATE_TODO_SUCCESS,
+  TODO_NOT_FOUND,
+  TODOS_NOT_FOUND,
+  ADD_TODO_FAILURE
+} from '../helpers/constants';
 
 /**
  * @fileoverview Class to manage todos
@@ -8,33 +16,29 @@ const pool = connection();
  * @exports TodoController
  */
 class TodoController {
-
-/**
- *  Create a todo
- *  @param {Object} request
- *  @param {Object} response
- *  @param {object} next - Error handler
- *  @return {Object} json
- */
-  static async addTodo(request, response, next){
-    try{
-      const {
+  /**
+   * @param {Object} request
+   * @param {Object} response
+   * @param {object} next - Error handler
+   * @description Create a todo
+   * @return {Object} json
+   * @memberof TodoController
+   */
+  static async addTodo(request, response, next) {
+    try {
+      const { title, description } = request.body;
+      const userId = request.user.id;
+      const result = await TodoService.createTodo({
         title,
-        description
-      } = request.body;
-
-      const query = {
-        /* eslint-disable-next-line */
-        text: 'insert into todos(title, description) Values($1, $2) returning *',
-        values: [ title, description ],
-      };
-      const result = await pool.query(query);
-      return response.status(201).json({
-          message: 'The todo has been added successfully',
-          success: true,
-          data: result.rows
+        description,
+        userId
       });
-    }catch(error){
+      const { rowCount, rows } = result;
+      if (!rowCount || rowCount < 1) {
+        return sendResponse(response, 400, false, ADD_TODO_FAILURE);
+      }
+      return sendResponse(response, 201, false, ADD_TODO_SUCCESS, rows);
+    } catch (error) {
       return next(error);
     }
   }
@@ -46,16 +50,16 @@ class TodoController {
    *  @param {object} next - Error handler
    *  @return {Object} json
    */
-  static async getTodos(request, response, next){
-    try{
-      const query = 'select * from todos';
-      const result = await pool.query(query);
-      return response.status(200).json({
-          message: 'Successfully got all todos',
-          success: true,
-          data: result.rows
-      });
-    }catch(error){
+  static async getTodos(request, response, next) {
+    try {
+      const userId = request.user.id;
+      const result = await TodoService.fetchTodos(userId);
+      const { rowCount, rows } = result;
+      if (rowCount < 1) {
+        return sendResponse(response, 404, false, TODOS_NOT_FOUND);
+      }
+      return sendResponse(response, 200, true, GET_TODO_SUCCESS, rows);
+    } catch (error) {
       return next(error);
     }
   }
@@ -67,17 +71,17 @@ class TodoController {
    *  @param {object} next - Error handler
    *  @return {Object} json
    */
-  static async getTodoById(request, response, next){
-    try{
+  static async getTodoById(request, response, next) {
+    try {
       const { todoId } = request.params;
-      const query = 'select * from todos Where id='+todoId;
-      const result = await pool.query(query);
-      return response.status(200).json({
-          message: 'Successfully got the todo',
-          success: true,
-          data: result.rows
-      });
-    }catch(error){
+      const userId = request.user.id;
+      const result = await TodoService.fetchTodoById({ todoId, userId });
+      const { rowCount, rows } = result;
+      if (!rowCount || rowCount < 1) {
+        return sendResponse(response, 404, false, TODO_NOT_FOUND);
+      }
+      return sendResponse(response, 200, true, GET_TODO_SUCCESS, rows);
+    } catch (error) {
       return next(error);
     }
   }
@@ -89,24 +93,23 @@ class TodoController {
    *  @param {object} next - Error handler
    *  @return {Object} json
    */
-  static async updateTodoById(request, response, next){
-    try{
+  static async updateTodoById(request, response, next) {
+    try {
       const { todoId } = request.params;
-      const {
+      const { title, description } = request.body;
+      const userId = request.user.id;
+      const result = await TodoService.updateTodo({
+        todoId,
         title,
-        description
-      } = request.body;
-
-      /* eslint-disable-next-line */
-      const query = `update todos set title='${title}', description='${description}' where id=${todoId} returning *`;
-
-      const result = await pool.query(query);
-      return response.status(200).json({
-          message: 'Successfully updated the todo',
-          success: true,
-          data: result.rows
+        description,
+        userId
       });
-    }catch(error){
+      const { rowCount, rows } = result;
+      if (!rowCount || rowCount < 1) {
+        return sendResponse(response, 404, false, TODO_NOT_FOUND);
+      }
+      return sendResponse(response, 200, true, UPDATE_TODO_SUCCESS, rows);
+    } catch (error) {
       return next(error);
     }
   }
@@ -118,19 +121,17 @@ class TodoController {
    *  @param {object} next - Error handler
    *  @return {Object} json
    */
-  static async deleteTodoById(request, response, next){
-    try{
+  static async deleteTodoById(request, response, next) {
+    try {
       const { todoId } = request.params;
-      /* eslint-disable-next-line */
-      const query = `delete from todos where id=${todoId} returning *`;
-
-      const result = await pool.query(query);
-      return response.status(200).json({
-          message: 'Successfully deleted the todo',
-          success: true,
-          data: result.rows
-      });
-    }catch(error){
+      const userId = request.user.id;
+      const result = await TodoService.deleteTodoById({ todoId, userId });
+      const { rowCount, rows } = result;
+      if (!rowCount || rowCount < 1) {
+        return sendResponse(response, 404, false, TODO_NOT_FOUND);
+      }
+      return sendResponse(response, 200, true, DELETE_TODO_SUCCESS, rows);
+    } catch (error) {
       return next(error);
     }
   }

@@ -6,8 +6,10 @@
     "start": "NODE_ENV=production yarn build && yarn run serve",
     "start:dev": "NODE_ENV=dev nodemon --exec babel-node src/server.js",
     "build": "babel src --out-dir ./dist --source-maps",
+    "dev:migrate": "NODE_ENV=dev babel-node src/database/migrations/index.js",
+    "migrate": "NODE_ENV=production babel-node src/database/migrations/index.js",
     "coveralls": "jest --coverage --forceExit --coverageReporters=text-lcov | coveralls",
-    "test": "NODE_ENV=test jest --coverage --forceExit",
+    "test": "NODE_ENV=test jest --coverage --detectOpenHandles --forceExit",
     "serve": "NODE_ENV=production && node dist/server.js",
     "lint": "eslint '**/*.{js,jsx}' --quiet",
     "lint:fix": "eslint '**/*.{js,jsx}' --fix"
@@ -21,9 +23,11 @@
     "@babel/node": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
+    "bcrypt": "^3.0.6",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^7.11.0",
     "supertest": "^4.0.2"
   },

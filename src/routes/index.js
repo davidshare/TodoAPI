@@ -1,24 +1,23 @@
+import authRoutes from './authRoutes';
+import todoRoutes from './todoRoutes';
+import noteRoutes from './noteRoutes';
 
-import TodoController from '../controllers/todoController'
-;
+/**
+ * @param {object} app
+ * @returns {object} undefine
+ * @description function for handling routing
+ */
+const routes = app => {
+  app.get('/', (request, response) =>
+    response.status(200).json({
+      success: true,
+      message: 'Welcome to the Todo API'
+    })
+  );
 
-const routes = (app) =>{
-  app.get('/', (request, response) => response.status(200).send({
-    statusCode: 200,
-    success: true,
-    message: 'Welcome to the Todo API',
-  }));
-
-  app.get('/api/v1/todos', TodoController.getTodos);
-
-  app.post('/api/v1/todo', TodoController.addTodo);
-
-  app.get('/api/v1/todos/:todoId', TodoController.getTodoById);
-
-  app.put('/api/v1/todos/:todoId', TodoController.updateTodoById);
-
-  app.delete('/api/v1/todos/:todoId', TodoController.deleteTodoById);
-
+  authRoutes(app);
+  todoRoutes(app);
+  noteRoutes(app);
 };
 
 export default routes;
