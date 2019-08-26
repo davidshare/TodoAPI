@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - "node"
+cache:
+  directories:
+  - node_modules
+script:
+  - yarn run test-with-coverage
+  - yarn run coveralls
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database todotest;' -U postgres
