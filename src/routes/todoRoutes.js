@@ -12,7 +12,7 @@ const todoRoutes = app => {
 
   // Post a todo
   app.post(
-    '/api/v1/todo',
+    '/api/v1/todos',
     [Authentication.authenticateUser, ContentValidator.isValidTitle],
     TodoController.addTodo
   );

@@ -47,5 +47,8 @@ export const REQUIRED_PASSWORD='Password error: no password provided.';
 export const REQUIRED_COMPARE_PASSWORDS='Please supply both passwords.';
 export const INVALID_TOKEN='Authentication failed: Please supply a valid token.';
 
+//API prefix
+export const API_PREFIX='/api/v1/';
+
 
 

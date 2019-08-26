@@ -37,7 +37,7 @@ class TodoController {
       if (!rowCount || rowCount < 1) {
         return sendResponse(response, 400, false, ADD_TODO_FAILURE);
       }
-      return sendResponse(response, 201, false, ADD_TODO_SUCCESS, rows);
+      return sendResponse(response, 201, true, ADD_TODO_SUCCESS, rows);
     } catch (error) {
       return next(error);
     }
