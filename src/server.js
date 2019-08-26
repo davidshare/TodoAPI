@@ -36,7 +36,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(port);
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port);
+}
 
 /* eslint-disable-next-line */
 console.log('app running on port ', port);
