@@ -9,9 +9,9 @@
     "dev:migrate": "NODE_ENV=dev babel-node src/database/migrations/index.js",
     "test:migrate": "NODE_ENV=test babel-node src/database/migrations/index.js",
     "migrate": "NODE_ENV=production babel-node src/database/migrations/index.js",
-    "coveralls": "jest --coverage --forceExit --coverageReporters=text-lcov | coveralls",
-    "test": "yarn run test:migrate && NODE_ENV=test jest --coverage",
-    "test-with-coverage": "yarn run test:migrate && NODE_ENV=test jest --coverage && cat ./coverage/lcov.info | codacy-coverage",
+    "coveralls": "yarn run dev:migrate && jest --coverage --forceExit --coverageReporters=text-lcov | coveralls",
+    "test": "yarn run test:migrate && NODE_ENV=test jest --coverage --forceExit",
+    "test-with-coverage": "yarn test --forceExit && cat ./coverage/lcov.info | codacy-coverage",
     "serve": "NODE_ENV=production && node dist/server.js",
     "lint": "eslint '**/*.{js,jsx}' --quiet",
     "lint:fix": "eslint '**/*.{js,jsx}' --fix"
