@@ -34,11 +34,7 @@ class NoteController {
         userId,
         noteType
       });
-      const { rowCount, rows } = result;
-      if (!rowCount || rowCount < 1) {
-        return sendResponse(response, 400, false, ADD_NOTE_FAILURE);
-      }
-      return sendResponse(response, 201, true, ADD_NOTE_SUCCESS, rows);
+      return sendResponse(response, 201, true, ADD_NOTE_SUCCESS, result.rows);
     } catch (error) {
       return next(error);
     }

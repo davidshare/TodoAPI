@@ -7,7 +7,6 @@ import {
   UPDATE_TODO_SUCCESS,
   TODO_NOT_FOUND,
   TODOS_NOT_FOUND,
-  ADD_TODO_FAILURE
 } from '../helpers/constants';
 
 /**
@@ -33,11 +32,7 @@ class TodoController {
         description,
         userId
       });
-      const { rowCount, rows } = result;
-      if (!rowCount || rowCount < 1) {
-        return sendResponse(response, 400, false, ADD_TODO_FAILURE);
-      }
-      return sendResponse(response, 201, true, ADD_TODO_SUCCESS, rows);
+      return sendResponse(response, 201, true, ADD_TODO_SUCCESS, result.rows);
     } catch (error) {
       return next(error);
     }

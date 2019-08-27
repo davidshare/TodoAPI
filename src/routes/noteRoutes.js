@@ -12,7 +12,7 @@ const noteRoutes = app => {
 
   // Post a note
   app.post(
-    '/api/v1/note',
+    '/api/v1/notes',
     [
       Authentication.authenticateUser,
       ContentValidator.isValidTitle,
