@@ -7,7 +7,11 @@ import {
   EMAIL_EXISTS,
   SIGNIN_SUCCESS,
   INVALID_SIGNIN,
-  REQUIRED_COMPARE_PASSWORDS
+  REQUIRED_COMPARE_PASSWORDS,
+  INVALID_FIRSTNAME,
+  INVALID_LASTNAME,
+  INVALID_EMAIL,
+  INVALID_PASSWORD
 } from '../../helpers/constants';
 import {userSeeds} from '../../database/seeders';
 
@@ -39,10 +43,28 @@ describe('Test the user signup', () => {
     done();
   });
 
+  it('should not create a user with invalid firstname', async(done) => {
+    const response = await request(app).post(`${API_PREFIX}auth/signup`)
+    .send(userSeeds.user8);
+    expect(response.body.message).toBe(INVALID_FIRSTNAME);
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
+    done();
+  });
+
   it('should not create a user without a lastname', async(done) => {
     const response = await request(app).post(`${API_PREFIX}auth/signup`)
     .send(userSeeds.user3);
     expect(response.body.message).toBe(REQUIRED_FIELDS);
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
+    done();
+  });
+
+  it('should not create a user with invalid lastname', async(done) => {
+    const response = await request(app).post(`${API_PREFIX}auth/signup`)
+    .send(userSeeds.user9);
+    expect(response.body.message).toBe(INVALID_LASTNAME);
     expect(response.status).toBe(400);
     expect(response.body.success).toBe(false);
     done();
@@ -57,10 +79,28 @@ describe('Test the user signup', () => {
     done();
   });
 
+  it('should not create a user with invalid email', async(done) => {
+    const response = await request(app).post(`${API_PREFIX}auth/signup`)
+    .send(userSeeds.user10);
+    expect(response.body.message).toBe(INVALID_EMAIL);
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
+    done();
+  });
+
   it('should not create a user without an password', async(done) => {
     const response = await request(app).post(`${API_PREFIX}auth/signup`)
     .send(userSeeds.user5);
     expect(response.body.message).toBe(REQUIRED_FIELDS);
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
+    done();
+  });
+
+  it('should not create a user with an invalid password', async(done) => {
+    const response = await request(app).post(`${API_PREFIX}auth/signup`)
+    .send(userSeeds.user11);
+    expect(response.body.message).toBe(INVALID_PASSWORD);
     expect(response.status).toBe(400);
     expect(response.body.success).toBe(false);
     done();

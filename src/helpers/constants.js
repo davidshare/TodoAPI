@@ -35,11 +35,11 @@ export const NAME_REGEX=/^([a-zA-Z]){3,20}$/;
 export const TITLE_REGEX=/^[a-zA-Z][a-zA-Z0-9\s?:]{10,255}$/;
 export const INVALID_FIRSTNAME='Invalid firstname: Please supply a valid first name.';
 export const INVALID_LASTNAME='Invalid lastname: Please supply a valid last name.';
-export const INVALID_EMAIL='Invalid email: Please supply a valid last email.';
+export const INVALID_EMAIL='Invalid email: Please supply a valid email.';
 export const INVALID_PASSWORD='Invalid password: Please supply a valid password.';
 export const EMAIL_EXISTS='Sorry, this email address has already been registered.';
 export const REQUIRED_FIELDS='All fields are required.';
-export const REQUIRED_TITLE='The todo title is required.';
+export const REQUIRED_TITLE='The title is required.';
 export const INVALID_TITLE='Invalid Todo title: please supply a valid todo title.';
 
 // AUTH CONSTANTS

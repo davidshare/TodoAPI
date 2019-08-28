@@ -4,7 +4,6 @@ import {
   SIGNUP_SUCCESS,
   INVALID_SIGNIN,
   SIGNIN_SUCCESS,
-  SIGNUP_ERROR
 } from '../helpers/constants';
 import AuthHelpers from '../helpers/AuthHelpers';
 
@@ -26,12 +25,8 @@ class UserController {
   static async signup(request, response, next){
     try{
       const result = await UserService.createUser(request.body);
-      const {rowCount, rows } = result;
-      if(!result || rowCount < 0){
-        return sendResponse(response, 400, false, SIGNUP_ERROR, result);
-      }
       const user = AuthHelpers.generateJWT(
-        AuthHelpers.stripDateAndPassword(rows[0]));
+        AuthHelpers.stripDateAndPassword(result.rows[0]));
       return sendResponse(response, 200, true, SIGNUP_SUCCESS, user);
     }catch(error){
       return next(error);
