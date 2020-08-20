@@ -25,7 +25,7 @@
     "@babel/node": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "codacy-coverage": "^3.4.0",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
